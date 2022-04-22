@@ -55,7 +55,7 @@ class Node(object):
 
     def __repr__(self):
         return f'[P:{self.player_just_moved} A:{self.action} ' \
-               f'W/V:{int(self.wins)}/{self.visits} Q:{self.value:.2f}'
+               f'W/V:{int(self.wins)}/{self.visits} Q:{self.value:.2f}]'
 
     def tree_to_string(self, indent=0, deep=0, limit=-1):
         s = self.indent_string(indent) + str(self)
