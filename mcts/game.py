@@ -1,3 +1,5 @@
+import pickle
+
 class Game(object):
     """Game template class."""
 
@@ -12,7 +14,7 @@ class Game(object):
             the cloned game state.
 
         """
-        pass
+        return pickle.loads(pickle.dumps(self))
 
     def take_action(self, action):
         """Update the game state by carrying out the given action.
@@ -21,7 +23,7 @@ class Game(object):
             action: the given action.
 
         """
-        pass
+        raise NotImplementedError()
 
     def get_actions(self):
         """Get all possible actions from this state.
@@ -30,7 +32,7 @@ class Game(object):
             all possible actions.
 
         """
-        pass
+        raise NotImplementedError()
 
     def get_result(self, playerjm):
         """Get the game result from the viewpoint of playerjm.
@@ -39,7 +41,7 @@ class Game(object):
             playerjm: the player that take the action
 
         """
-        pass
+        raise NotImplementedError()
 
     def __repr__(self):
         pass

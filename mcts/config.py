@@ -4,7 +4,7 @@ from mcts.node import Node
 from mcts.value import AvgValueCls
 
 
-class SearchMgr(object):
+class MCTSConfig(object):
     def __init__(self):
         self.uct_c = 2
         self.random_choice = random.choice

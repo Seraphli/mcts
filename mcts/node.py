@@ -1,8 +1,8 @@
 class Node(object):
-    def __init__(self, game, search_mgr, action='root', parent=None):
+    def __init__(self, game, config, action='root', parent=None):
         self.action = action
         self.parent = parent
-        self.search_mgr = search_mgr
+        self.config = config
 
         self.descendant = game.get_actions()
         self.untried_actions = game.get_actions()
@@ -10,7 +10,7 @@ class Node(object):
 
         self.children = []
         self.action_child_map = {}
-        self._value = self.search_mgr.value_cls()
+        self._value = self.config.value_cls()
 
     def add_child(self, child):
         assert isinstance(child, Node)
@@ -23,7 +23,7 @@ class Node(object):
         return self.action_child_map[action]
 
     def sorted_children(self):
-        return sorted(self.children, key=self.search_mgr.sort_lambda)
+        return sorted(self.children, key=self.config.sort_lambda)
 
     def uct_select_child(self):
         """
@@ -32,7 +32,7 @@ class Node(object):
         lambda c: c.wins/c.visits + UCTK * sqrt(2*log(self.visits)/c.visits
         to vary the amount of exploration versus exploitation.
         """
-        return sorted(self.children, key=self.search_mgr.uct_lambda(self))[-1]
+        return sorted(self.children, key=self.config.uct_lambda(self))[-1]
 
     def detach(self):
         self.parent = None

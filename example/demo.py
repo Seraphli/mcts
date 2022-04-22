@@ -1,6 +1,6 @@
 from mcts.game import Game
 from mcts.mcts import MCTS
-from mcts.search_mgr import SearchMgr
+from mcts.config import MCTSConfig
 
 
 class NimGame(Game):
@@ -14,6 +14,7 @@ class NimGame(Game):
 
     def __init__(self, ch):
         super(NimGame, self).__init__()
+        self.player_just_moved = 2
         self.chips = ch
 
     def clone(self):
@@ -46,8 +47,8 @@ class NimGame(Game):
 
 def uct_play_game():
     game = NimGame(15)
-    search_mgr = SearchMgr()
-    p1, p2 = MCTS(search_mgr).set_root(game), MCTS(search_mgr).set_root(game)
+    config = MCTSConfig()
+    p1, p2 = MCTS(config).set_root(game), MCTS(config).set_root(game)
     while game.get_actions():
         print(str(game))
         a1 = p1.uct(game, iters=100)

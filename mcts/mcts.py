@@ -1,13 +1,13 @@
-from mcts.search_mgr import SearchMgr
+from mcts.config import MCTSConfig
 
 
 class MCTS(object):
-    def __init__(self, search_mgr: SearchMgr, verbose=0):
-        self.search_mgr = search_mgr
+    def __init__(self, config: MCTSConfig, verbose=0):
+        self.config = config
         self.verbose = verbose
 
     def set_root(self, game):
-        self._root = self.search_mgr.node_cls(game, self.search_mgr)
+        self._root = self.config.node_cls(game, self.config)
         return self
 
     def update_root(self, action):
@@ -31,15 +31,15 @@ class MCTS(object):
             self._actions.append(a)
             self._game.take_action(a)
             # add child and descend tree
-            child_node = self.search_mgr.node_cls(
-                self._game, self.search_mgr, action=a, parent=self._node)
+            child_node = self.config.node_cls(
+                self._game, self.config, action=a, parent=self._node)
             self._node = self._node.add_child(child_node)
 
     def _rollout(self):
         # Rollout - this can often be made orders of magnitude quicker
         # while state is non-terminal
         while self._game.get_actions():
-            a = self.search_mgr.random_choice(self._game.get_actions())
+            a = self.config.random_choice(self._game.get_actions())
             self._actions.append(a)
             self._game.take_action(a)
 
