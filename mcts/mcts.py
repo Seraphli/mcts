@@ -2,9 +2,8 @@ from mcts.config import MCTSConfig
 
 
 class MCTS(object):
-    def __init__(self, config: MCTSConfig, verbose=0):
+    def __init__(self, config: MCTSConfig):
         self.config = config
-        self.verbose = verbose
 
     def set_root(self, game):
         self._root = self.config.node_cls(game, self.config)
@@ -54,7 +53,7 @@ class MCTS(object):
             self._node = self._node.parent
 
     def uct(self, game, iters):
-        if self.verbose >= 1:
+        if self.config.bar:
             from tqdm import trange
             import sys
             iterator = trange(iters, file=sys.stdout)
@@ -71,11 +70,11 @@ class MCTS(object):
             self._rollout()
             self._backup()
 
-        if self.verbose >= 2:
+        if self.config.child_verbose >= 1:
             print(self._root.children_to_string())
-        if self.verbose >= 3:
+        if self.config.child_verbose >= 2:
             print(self._root.tree_to_string(
-                limit=int((self.verbose - 3) * 100)))
+                limit=int((self.verbose - 2) * 100)))
 
         s = self._root.sorted_children()[::-1]
         return s[0].action

@@ -11,6 +11,10 @@ class MCTSConfig(object):
         self.value_cls = AvgValueCls
         self.node_cls = Node
         self.sort_lambda = lambda c: c.value
+        # Display progressbar
+        self.bar = False
+        # Display search result
+        self.child_verbose = 0
 
     def uct_lambda(self, node):
         return lambda c: c.value + sqrt(
