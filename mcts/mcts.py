@@ -74,7 +74,7 @@ class MCTS(object):
             print(self._root.children_to_string())
         if self.config.child_verbose >= 2:
             print(self._root.tree_to_string(
-                limit=int((self.verbose - 2) * 100)))
+                limit=int((self.config.child_verbose - 2) * 100)))
 
         s = self._root.sorted_children()[::-1]
         return s[0].action
