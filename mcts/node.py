@@ -7,10 +7,11 @@ if TYPE_CHECKING:
 
 
 class Node(object):
-    def __init__(self, game: Game, config: Config, action="root", parent=None):
+    def __init__(self, game: Game, config: Config, action="root", parent=None, depth=0):
         self.action = action
         self.parent = parent
         self.config = config
+        self.depth = depth
 
         self.descendant = game.get_actions()
         self.untried_actions = game.get_actions()
@@ -19,6 +20,7 @@ class Node(object):
         self.children = []
         self.action_child_map = {}
         self._value = self.config.value_cls()
+        self._depth_estimate = 0
 
     def is_leaf(self):
         return not self.children
@@ -50,10 +52,25 @@ class Node(object):
 
     def detach(self):
         self.parent = None
+        # Update depth align with new root
+        self._decrease_depth()
         return self
+
+    def _decrease_depth(self):
+        self.depth -= 1
+        for c in self.children:
+            c._decrease_depth()
 
     def update(self, result, virtual_loss=0):
         self._value.update(result, virtual_loss)
+
+    def update_depth(self, depth):
+        assert depth >= self.depth, "depth should be larger than current depth"
+        self._depth_estimate += depth - self.depth
+
+    @property
+    def depth_future(self):
+        return self._depth_estimate / self.visits
 
     @property
     def wins(self):

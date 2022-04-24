@@ -31,7 +31,11 @@ class MCTS(object):
             self._game.take_action(a)
             # add child and descend tree
             child_node = self.config.node_cls(
-                self._game, self.config, action=a, parent=self._node
+                self._game,
+                self.config,
+                action=a,
+                parent=self._node,
+                depth=self._node.depth + 1,
             )
             self._node = self._node.add_child(child_node)
 
@@ -46,10 +50,12 @@ class MCTS(object):
     def _backup(self):
         # Backpropagate
         # backpropagate from the expanded node and work back to the root node
+        depth = len(self._actions)
         while self._node is not None:
             # state is terminal. Update node with result
             # from POV of node.playerJustMoved
             self._node.update(self._game.get_result(self._node.player_just_moved))
+            self._node.update_depth(depth)
             self._node = self._node.parent
 
     def uct(self, game, iters):
