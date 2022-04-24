@@ -40,19 +40,22 @@ class NimGame(Game):
             return 0.0
 
     def __repr__(self):
-        s = 'Chips:' + str(self.chips) + \
-            ' JustPlayed:' + str(self.player_just_moved)
+        s = "Chips:" + str(self.chips) + " JustPlayed:" + str(self.player_just_moved)
         return s
 
 
 def uct_play_game():
     game = NimGame(15)
     config = MCTSConfig()
+    # Set uct c=10 for better exploration
+    config.uct_c = 10
+    # Set debug output to depth 2
+    config.child_verbose = 2.02
     p1, p2 = MCTS(config).set_root(game), MCTS(config).set_root(game)
     while game.get_actions():
         print(str(game))
         a1 = p1.uct(game, iters=100)
-        a2 = p2.uct(game, iters=1000)
+        a2 = p2.uct(game, iters=10000)
         if game.player_just_moved == 1:
             # play with values for iter_max and verbose = True
             # Player 2
@@ -60,17 +63,17 @@ def uct_play_game():
         else:
             # Player 1
             a = a1
-        print('Best Action: ' + str(a) + '\n')
+        print("Best Action: " + str(a) + "\n")
         game.take_action(a)
         p1.update_root(a)
         p2.update_root(a)
     if game.get_result(game.player_just_moved) == 1.0:
-        print('Player ' + str(game.player_just_moved) + ' wins!')
+        print("Player " + str(game.player_just_moved) + " wins!")
     elif game.get_result(game.player_just_moved) == 0.0:
-        print('Player ' + str(3 - game.player_just_moved) + ' wins!')
+        print("Player " + str(3 - game.player_just_moved) + " wins!")
     else:
-        print('Nobody wins!')
+        print("Nobody wins!")
 
 
-if __name__ == '__main__':
+if __name__ == "__main__":
     uct_play_game()

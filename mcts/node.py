@@ -1,5 +1,13 @@
+from __future__ import annotations
+from typing import TYPE_CHECKING
+
+if TYPE_CHECKING:
+    from mcts.game import Game
+    from mcts.config import Config
+
+
 class Node(object):
-    def __init__(self, game, config, action='root', parent=None):
+    def __init__(self, game: Game, config: Config, action="root", parent=None):
         self.action = action
         self.parent = parent
         self.config = config
@@ -23,7 +31,10 @@ class Node(object):
         return self.action_child_map[action]
 
     def sorted_children(self):
-        return sorted(self.children, key=self.config.sort_lambda)
+        return self.config.sorted_children(self)
+
+    def sorted_children_for_print(self):
+        return self.config.sorted_children_for_print(self)
 
     def uct_select_child(self):
         """
@@ -54,28 +65,30 @@ class Node(object):
         return self._value.value
 
     def __repr__(self):
-        return f'[P:{self.player_just_moved} A:{self.action} ' \
-               f'W/V:{int(self.wins)}/{self.visits} Q:{self.value:.2f}]'
+        return (
+            f"[P:{self.player_just_moved} A:{self.action} "
+            f"W/V:{int(self.wins)}/{self.visits} Q:{self.value:.2f}]"
+        )
 
     def tree_to_string(self, indent=0, deep=0, limit=-1):
         s = self.indent_string(indent) + str(self)
         if limit != -1 and deep >= limit:
             return s
-        for c in self.sorted_children():
+        for c in self.sorted_children_for_print():
             s += c.tree_to_string(indent + 1, deep + 1, limit)
         if deep == 0:
-            s += '\n'
+            s += "\n"
         return s
 
     @staticmethod
     def indent_string(indent):
-        s = '\n'
+        s = "\n"
         for i in range(1, indent + 1):
-            s += '| '
+            s += "| "
         return s
 
     def children_to_string(self):
-        s = ''
-        for idx, c in enumerate(self.sorted_children()):
-            s += f'{idx}: {c}\n'
+        s = ""
+        for idx, c in enumerate(self.sorted_children_for_print()):
+            s += f"{idx}: {c}\n"
         return s

@@ -7,15 +7,26 @@ from mcts.value import AvgValueCls
 class MCTSConfig(object):
     def __init__(self):
         self.uct_c = 2
+        # Can use a fixed seed random choice
         self.random_choice = random.choice
+        # Can be change to AvgValueCls or MaxValueCls
         self.value_cls = AvgValueCls
         self.node_cls = Node
-        self.sort_lambda = lambda c: c.value
         # Display progressbar
         self.bar = False
         # Display search result
         self.child_verbose = 0
 
     def uct_lambda(self, node):
-        return lambda c: c.value + sqrt(
-            self.uct_c * log(node.visits) / c.visits)
+        return lambda c: c.value + sqrt(self.uct_c * log(node.visits) / c.visits)
+
+    def sorted_children(self, node):
+        # Can be changed to sort by visits or wins or more complex method
+        # Used for choose final action
+        # The first one will be selected as the best action
+        return sorted(node.children, key=lambda c: c.value, reverse=True)
+
+    def sorted_children_for_print(self, node):
+        # Can be changed to sort by visits or wins or more complex method
+        # Only used for print debug information
+        return sorted(node.children, key=lambda c: c.value, reverse=True)

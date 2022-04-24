@@ -31,7 +31,8 @@ class MCTS(object):
             self._game.take_action(a)
             # add child and descend tree
             child_node = self.config.node_cls(
-                self._game, self.config, action=a, parent=self._node)
+                self._game, self.config, action=a, parent=self._node
+            )
             self._node = self._node.add_child(child_node)
 
     def _rollout(self):
@@ -48,14 +49,14 @@ class MCTS(object):
         while self._node is not None:
             # state is terminal. Update node with result
             # from POV of node.playerJustMoved
-            self._node.update(
-                self._game.get_result(self._node.player_just_moved))
+            self._node.update(self._game.get_result(self._node.player_just_moved))
             self._node = self._node.parent
 
     def uct(self, game, iters):
         if self.config.bar:
             from tqdm import trange
             import sys
+
             iterator = trange(iters, file=sys.stdout)
         else:
             iterator = range(iters)
@@ -73,8 +74,11 @@ class MCTS(object):
         if self.config.child_verbose >= 1:
             print(self._root.children_to_string())
         if self.config.child_verbose >= 2:
-            print(self._root.tree_to_string(
-                limit=int((self.config.child_verbose - 2) * 100)))
+            print(
+                self._root.tree_to_string(
+                    limit=int((self.config.child_verbose - 2) * 100)
+                )
+            )
 
-        s = self._root.sorted_children()[::-1]
+        s = self._root.sorted_children()
         return s[0].action
