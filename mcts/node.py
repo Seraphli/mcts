@@ -20,6 +20,9 @@ class Node(object):
         self.action_child_map = {}
         self._value = self.config.value_cls()
 
+    def is_leaf(self):
+        return not self.children
+
     def add_child(self, child):
         assert isinstance(child, Node)
         self.untried_actions.remove(child.action)
