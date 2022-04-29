@@ -5,6 +5,10 @@ class MCTS(object):
     def __init__(self, config: MCTSConfig):
         self.config = config
 
+    @property
+    def root(self):
+        return self._root
+
     def set_root(self, game):
         self._root = self.config.node_cls(game, self.config)
         return self
@@ -85,6 +89,10 @@ class MCTS(object):
                     limit=int((self.config.child_verbose - 2) * 100)
                 )
             )
+
+        self._node = None
+        self._game = None
+        self._actions = None
 
         s = self._root.sorted_children()
         return s[0].action
