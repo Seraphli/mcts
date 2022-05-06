@@ -3,18 +3,40 @@ from typing import TYPE_CHECKING
 
 if TYPE_CHECKING:
     from mcts.game import Game
-    from mcts.config import Config
+    from mcts.config import MCTSConfig
+    from typing import Union, List, Dict
+
+from copy import deepcopy
 
 
 class Node(object):
-    def __init__(self, game: Game, config: Config, action="root", parent=None, depth=0):
+    descendant: List[any]
+    descendant_desc: Dict[any, str]
+    untried_actions: List[any]
+    player_just_moved: int
+    children: List[Node]
+    action_child_map: Dict[any, Node]
+
+    def __init__(
+        self,
+        game: Game,
+        config: MCTSConfig,
+        action: any = "root",
+        desc: str = "root",
+        parent: Union[Node, None] = None,
+        depth: int = 0,
+    ):
         self.action = action
+        self.desc = desc
         self.parent = parent
         self.config = config
         self.depth = depth
 
-        self.descendant = game.get_actions()
-        self.untried_actions = game.get_actions()
+        actions = game.get_actions()
+        actions_desc = game.get_actions_desc()
+        self.descendant = deepcopy(actions)
+        self.descendant_desc = deepcopy(actions_desc)
+        self.untried_actions = deepcopy(actions)
         self.player_just_moved = game.player_just_moved
 
         self.children = []
@@ -25,7 +47,7 @@ class Node(object):
     def is_leaf(self):
         return not self.children
 
-    def add_child(self, child):
+    def add_child(self, child: Node):
         assert isinstance(child, Node)
         self.untried_actions.remove(child.action)
         self.children.append(child)

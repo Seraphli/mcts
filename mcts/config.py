@@ -5,6 +5,10 @@ from mcts.value import AvgValueCls
 
 
 class MCTSConfig(object):
+    uct_c: float
+    bar: bool
+    child_verbose: float
+
     def __init__(self):
         self.uct_c = 2
         # Can use a fixed seed random choice
@@ -17,16 +21,16 @@ class MCTSConfig(object):
         # Display search result
         self.child_verbose = 0
 
-    def uct_lambda(self, node):
+    def uct_lambda(self, node: Node):
         return lambda c: c.value + sqrt(self.uct_c * log(node.visits) / c.visits)
 
-    def sorted_children(self, node):
+    def sorted_children(self, node: Node):
         # Can be changed to sort by visits or wins or more complex method
         # Used for choose final action
         # The first one will be selected as the best action
         return sorted(node.children, key=lambda c: c.value, reverse=True)
 
-    def sorted_children_for_print(self, node):
+    def sorted_children_for_print(self, node: Node):
         # Can be changed to sort by visits or wins or more complex method
         # Only used for print debug information
         return sorted(node.children, key=lambda c: c.value, reverse=True)

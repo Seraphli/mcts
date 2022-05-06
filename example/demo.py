@@ -47,6 +47,8 @@ class NimGame(Game):
 def uct_play_game():
     game = NimGame(15)
     config = MCTSConfig()
+    # Display progress bar
+    config.bar = True
     # Set uct c=10 for better exploration
     config.uct_c = 10
     # Set debug output to depth 2

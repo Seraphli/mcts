@@ -1,7 +1,16 @@
-from mcts.config import MCTSConfig
+from __future__ import annotations
+from typing import TYPE_CHECKING
+
+if TYPE_CHECKING:
+    from mcts.node import Node
+    from mcts.game import Game
+    from mcts.config import MCTSConfig
 
 
 class MCTS(object):
+    _root: Node
+    _game: Game
+
     def __init__(self, config: MCTSConfig):
         self.config = config
 
@@ -9,7 +18,7 @@ class MCTS(object):
     def root(self):
         return self._root
 
-    def set_root(self, game):
+    def set_root(self, game: Game):
         self._root = self.config.node_cls(game, self.config)
         return self
 
@@ -30,7 +39,8 @@ class MCTS(object):
         # Expand
         # if we can expand (i.e. state/node is non-terminal)
         if self._node.untried_actions:
-            a = self._node.untried_actions[0]
+            a = self.config.random_choice(self._node.untried_actions)
+            desc = self._node.descendant_desc[a]
             self._actions.append(a)
             self._game.take_action(a)
             # add child and descend tree
@@ -38,6 +48,7 @@ class MCTS(object):
                 self._game,
                 self.config,
                 action=a,
+                desc=desc,
                 parent=self._node,
                 depth=self._node.depth + 1,
             )
@@ -62,7 +73,7 @@ class MCTS(object):
             self._node.update_depth(depth)
             self._node = self._node.parent
 
-    def uct(self, game, iters):
+    def uct(self, game: Game, iters: int):
         if self.config.bar:
             from tqdm import trange
             import sys
