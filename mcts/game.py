@@ -36,10 +36,10 @@ class Game(object):
         raise NotImplementedError()
 
     def get_actions_desc(self):
-        """Get all possible actions from this state.
+        """Get the description for all possible actions from this state.
 
         Returns:
-            all possible actions.
+            dict: the description for all possible actions.
 
         """
         return dict([(a, str(a)) for a in self.get_actions()])
