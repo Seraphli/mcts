@@ -57,7 +57,12 @@ class MCTS(object):
     def _rollout(self):
         # Rollout - this can often be made orders of magnitude quicker
         # while state is non-terminal
-        while self._game.get_actions():
+
+        depth = 0
+        max_depth = self.config.max_depth
+        while self._game.get_actions() and (
+            (max_depth > 0 and depth < max_depth) or max_depth == 0
+        ):
             a = self.config.random_choice(self._game.get_actions())
             self._actions.append(a)
             self._game.take_action(a)

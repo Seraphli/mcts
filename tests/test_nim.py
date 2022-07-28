@@ -44,7 +44,7 @@ class NimGame(Game):
         return s
 
 
-def uct_play_game():
+def test_uct_play_game():
     game = NimGame(15)
     config = MCTSConfig()
     # Display progress bar
@@ -75,7 +75,3 @@ def uct_play_game():
         print("Player " + str(3 - game.player_just_moved) + " wins!")
     else:
         print("Nobody wins!")
-
-
-if __name__ == "__main__":
-    uct_play_game()

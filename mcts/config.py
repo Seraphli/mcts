@@ -20,6 +20,8 @@ class MCTSConfig(object):
         self.bar = False
         # Display search result
         self.child_verbose = 0
+        # Max rollout depth, 0 stands for unlimited
+        self.max_depth = 0
 
     def uct_lambda(self, node: Node):
         return lambda c: c.value + sqrt(self.uct_c * log(node.visits) / c.visits)
