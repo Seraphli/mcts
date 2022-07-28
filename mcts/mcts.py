@@ -66,6 +66,7 @@ class MCTS(object):
             a = self.config.random_choice(self._game.get_actions())
             self._actions.append(a)
             self._game.take_action(a)
+            depth += 1
 
     def _backup(self):
         # Backpropagate
