@@ -103,7 +103,7 @@ class MCTS(object):
         if self.config.child_verbose >= 2:
             print(
                 self._root.tree_to_string(
-                    limit=int((self.config.child_verbose - 2) * 100)
+                    limit=round((self.config.child_verbose - 2) * 100)
                 )
             )
 
