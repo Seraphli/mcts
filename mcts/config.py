@@ -36,3 +36,9 @@ class MCTSConfig(object):
         # Can be changed to sort by visits or wins or more complex method
         # Only used for print debug information
         return sorted(node.children, key=lambda c: c.value, reverse=True)
+
+    def early_stop(self, root):
+        children = root.sorted_children()
+        if len(children) > 2 and children[0].visits > children[1].visits * 10:
+            return True
+        return False

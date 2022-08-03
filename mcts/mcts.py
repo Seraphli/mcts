@@ -80,6 +80,8 @@ class MCTS(object):
             self._node = self._node.parent
 
     def uct(self, game: Game, iters: int):
+        if len(self._root.descendant) == 1:
+            return self._root.descendant[0]
         if self.config.bar:
             from tqdm import trange
             import sys
@@ -89,6 +91,8 @@ class MCTS(object):
             iterator = range(iters)
 
         for _ in iterator:
+            if self.config.early_stop(self._root):
+                break
             self._node = self._root
             self._game = game.clone()
             self._actions = []
