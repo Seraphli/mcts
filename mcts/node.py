@@ -11,7 +11,6 @@ from copy import deepcopy
 
 class Node(object):
     descendant: List[any]
-    descendant_desc: Dict[any, str]
     untried_actions: List[any]
     player_just_moved: int
     children: List[Node]
@@ -43,9 +42,7 @@ class Node(object):
         self.depth = depth
 
         actions = game.get_actions()
-        actions_desc = game.get_actions_desc()
         self.descendant = deepcopy(actions)
-        self.descendant_desc = deepcopy(actions_desc)
         self.untried_actions = deepcopy(actions)
         self.player_just_moved = game.player_just_moved
 

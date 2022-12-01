@@ -35,15 +35,6 @@ class Game(object):
         """
         raise NotImplementedError()
 
-    def get_actions_desc(self):
-        """Get the description for all possible actions from this state.
-
-        Returns:
-            dict: the description for all possible actions.
-
-        """
-        return dict([(a, str(a)) for a in self.get_actions()])
-
     def get_result(self, playerjm):
         """Get the game result from the viewpoint of playerjm.
 

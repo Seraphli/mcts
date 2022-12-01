@@ -40,7 +40,7 @@ class MCTS(object):
         # if we can expand (i.e. state/node is non-terminal)
         if self._node.untried_actions:
             a = self.config.random_choice(self._node.untried_actions)
-            desc = self._node.descendant_desc[a]
+            desc = str(a)
             self._actions.append(a)
             self._game.take_action(a)
             # add child and descend tree
