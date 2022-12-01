@@ -42,8 +42,8 @@ class Node(object):
         self.depth = depth
 
         actions = game.get_actions()
-        self.descendant = deepcopy(actions)
-        self.untried_actions = deepcopy(actions)
+        self.descendant = [a for a in actions]
+        self.untried_actions = [a for a in actions]
         self.player_just_moved = game.player_just_moved
 
         self.children = []
