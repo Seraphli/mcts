@@ -60,13 +60,15 @@ class MCTS(object):
 
         depth = 0
         max_depth = self.config.max_depth
-        while self._game.get_actions() and (
+        actions = self._game.get_actions()
+        while actions and (
             (max_depth > 0 and depth < max_depth) or max_depth == 0
         ):
-            a = self.config.random_choice(self._game.get_actions())
+            a = self.config.random_choice(actions)
             self._actions.append(a)
             self._game.take_action(a)
             depth += 1
+            actions = self._game.get_actions()
 
     def _backup(self):
         # Backpropagate
